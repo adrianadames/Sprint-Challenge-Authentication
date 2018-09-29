@@ -48,9 +48,7 @@ function login(req, res) {
       .then(user => {
         
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
-          console.log('bleep')
           const token = generateToken(user);
-          console.log('bloop')
           res.send(token)
         }
         else {
