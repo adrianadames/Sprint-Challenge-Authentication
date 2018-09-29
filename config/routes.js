@@ -22,7 +22,7 @@ function register(req, res) {
   //hash password
   const hash = bcrypt.hashSync(user.password, 10); //10 rounds for development speed (i.e. in the interest of time)
   user.password = hash;
-  const token = generateToken(user);
+  // const token = generateToken(user);
 
     db('users')
       .insert(user)
@@ -31,7 +31,9 @@ function register(req, res) {
           .where({id:ids[0]})
           .first()
           .then(user => {
-            // const token = generateToken(user); // Q: Why didn't this const assignment work when placed here?
+            const generateToken= require('./middlewares').generateToken;
+
+            const token = generateToken(user); // Q: Why didn't this const assignment work when placed here?
             req.status(200).json(token);
           })
           .catch(err => res.status(500).json({err}));
