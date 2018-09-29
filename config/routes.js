@@ -23,6 +23,7 @@ function register(req, res) {
   const hash = bcrypt.hashSync(user.password, 10); //10 rounds for development speed (i.e. in the interest of time)
   user.password = hash;
   const token = generateToken(user);
+
     db('users')
       .insert(user)
       .then(ids => {
@@ -30,15 +31,32 @@ function register(req, res) {
           .where({id:ids[0]})
           .first()
           .then(user => {
+            // const token = generateToken(user); // Q: Why didn't this const assignment work when placed here?
             req.status(200).json(token);
           })
           .catch(err => res.status(500).json({err}));
       })
-
 }
 
 function login(req, res) {
   // implement user login
+  const credentials = req.body;
+
+    db('users')
+      .where({username:credentials.username})
+      .first()
+      .then(user => {
+        
+        if (user && bcrypt.compareSync(credentials.password, user.password)) {
+          console.log('bleep')
+          const token = generateToken(user);
+          console.log('bloop')
+          res.send(token)
+        }
+        else {
+          return res.status(401).json({error: 'Incorrect credentials'})
+        }
+      })
 }
 
 function getJokes(req, res) {
