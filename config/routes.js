@@ -2,10 +2,12 @@ const axios = require('axios');
 
 const knex = require('knex');
 const knexConfig = require('../knexfile');
+const bcrypt = require('bcryptjs');
 
 const db = knex(knexConfig.development);
 
 const { authenticate } = require('./middlewares');
+const { generateToken } = require('/middlewares')
 
 module.exports = server => {
   server.post('/api/register', register);
