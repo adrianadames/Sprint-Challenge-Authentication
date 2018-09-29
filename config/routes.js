@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const db = knex(knexConfig.development);
 
 const { authenticate } = require('./middlewares');
-const { generateToken } = require('/middlewares')
+const generateToken= require('./middlewares').generateToken;
 
 module.exports = server => {
   server.post('/api/register', register);
@@ -22,7 +22,7 @@ function register(req, res) {
   //hash password
   const hash = bcrypt.hashSync(user.password, 10); //10 rounds for development speed (i.e. in the interest of time)
   user.password = hash;
-
+  const token = generateToken(user);
     db('users')
       .insert(user)
       .then(ids => {
@@ -30,7 +30,7 @@ function register(req, res) {
           .where({id:ids[0]})
           .first()
           .then(user => {
-            req.status(200).json(user);
+            req.status(200).json(token);
           })
           .catch(err => res.status(500).json({err}));
       })

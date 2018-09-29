@@ -38,5 +38,5 @@ function generateToken(user) {
     expiresIn: '24h',
     jwtid: '07151987'
   };
-  return jwt.sign(payload, secret, options)
+  return jwt.sign(payload, jwtKey, options)
 }
