@@ -37,8 +37,8 @@ function register(req, res) {
             const token = generateToken(user); // Q: Why didn't this const assignment work when placed here?
             console.log('check3')
             console.log(token)
-            req.status(200).json(token);
-            
+            res.status(200).json(token);
+            console.log('check4')
           })
           .catch(err => res.status(500).json({'hello':"john"}));
       })
@@ -52,7 +52,7 @@ function login(req, res) {
       .where({username:credentials.username})
       .first()
       .then(user => {
-        
+        console.log('login_check1')
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
           const token = generateToken(user);
           res.send(token)
