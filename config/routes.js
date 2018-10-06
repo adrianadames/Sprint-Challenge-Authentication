@@ -31,12 +31,16 @@ function register(req, res) {
           .where({id:ids[0]})
           .first()
           .then(user => {
+            console.log('check1')
             const generateToken= require('./middlewares').generateToken;
-
+            console.log('check2')
             const token = generateToken(user); // Q: Why didn't this const assignment work when placed here?
+            console.log('check3')
+            console.log(token)
             req.status(200).json(token);
+            
           })
-          .catch(err => res.status(500).json({err}));
+          .catch(err => res.status(500).json({'hello':"john"}));
       })
 }
 
